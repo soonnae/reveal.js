@@ -79,7 +79,7 @@ const Plugin = () => {
 				type: 'connect',
 				state: deck.getState(),
 				url
-			} ), '*' );
+			} ), speakerWindow.origin || url );
 		}, 500 );
 
 		window.addEventListener( 'message', onPostMessage );
@@ -98,7 +98,7 @@ const Plugin = () => {
 			type: 'return',
 			result,
 			callId
-		} ), '*' );
+		} ), speakerWindow.origin || window.location.origin );
 
 	}
 
@@ -155,7 +155,7 @@ const Plugin = () => {
 			messageData.markdown = notesElements[0] && typeof notesElements[0].getAttribute( 'data-markdown' ) === 'string';
 		}
 
-		speakerWindow.postMessage( JSON.stringify( messageData ), '*' );
+		speakerWindow.postMessage( JSON.stringify( messageData ), speakerWindow.origin || window.location.origin );
 
 	}
 
