@@ -425,15 +425,15 @@ export default class SlideContent {
 
 				// YouTube postMessage API
 				if( /youtube\.com\/embed\//.test( iframe.getAttribute( 'src' ) ) && autoplay ) {
-					iframe.contentWindow.postMessage( '{"event":"command","func":"playVideo","args":""}', '*' );
+					iframe.contentWindow.postMessage( '{"event":"command","func":"playVideo","args":""}', 'https://www.youtube.com' );
 				}
 				// Vimeo postMessage API
 				else if( /player\.vimeo\.com\//.test( iframe.getAttribute( 'src' ) ) && autoplay ) {
-					iframe.contentWindow.postMessage( '{"method":"play"}', '*' );
+					iframe.contentWindow.postMessage( '{"method":"play"}', 'https://player.vimeo.com' );
 				}
 				// Generic postMessage API
 				else {
-					iframe.contentWindow.postMessage( 'slide:start', '*' );
+					iframe.contentWindow.postMessage( 'slide:start', iframe.src );
 				}
 
 			}
@@ -466,21 +466,21 @@ export default class SlideContent {
 
 			// Generic postMessage API for non-lazy loaded iframes
 			queryAll( element, 'iframe' ).forEach( el => {
-				if( el.contentWindow ) el.contentWindow.postMessage( 'slide:stop', '*' );
+				if( el.contentWindow ) el.contentWindow.postMessage( 'slide:stop', el.src );
 				el.removeEventListener( 'load', this.startEmbeddedIframe );
 			});
 
 			// YouTube postMessage API
 			queryAll( element, 'iframe[src*="youtube.com/embed/"]' ).forEach( el => {
 				if( !el.hasAttribute( 'data-ignore' ) && el.contentWindow && typeof el.contentWindow.postMessage === 'function' ) {
-					el.contentWindow.postMessage( '{"event":"command","func":"pauseVideo","args":""}', '*' );
+					el.contentWindow.postMessage( '{"event":"command","func":"pauseVideo","args":""}', 'https://www.youtube.com' );
 				}
 			});
 
 			// Vimeo postMessage API
 			queryAll( element, 'iframe[src*="player.vimeo.com/"]' ).forEach( el => {
 				if( !el.hasAttribute( 'data-ignore' ) && el.contentWindow && typeof el.contentWindow.postMessage === 'function' ) {
-					el.contentWindow.postMessage( '{"method":"pause"}', '*' );
+					el.contentWindow.postMessage( '{"method":"pause"}', 'https://player.vimeo.com' );
 				}
 			});
 
